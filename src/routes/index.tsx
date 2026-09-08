@@ -1,23 +1,40 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+// O site é HTML/CSS/JS puro em /public (index.html, style.css, script.js, assets/).
+// Esta rota apenas encaminha a raiz para esse arquivo.
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "Barbearia Hora do Corte — Barbearia em Praia Grande, SP" },
+      {
+        name: "description",
+        content:
+          "Barbearia Hora do Corte em Praia Grande (Tupiry): corte, barba, sobrancelha e descoloração. Agende pelo WhatsApp.",
+      },
+      { property: "og:title", content: "Barbearia Hora do Corte — Praia Grande, SP" },
+      {
+        property: "og:description",
+        content: "Cortes modernos, barba e acabamento premium. Agende pelo WhatsApp.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  useEffect(() => {
+    window.location.replace("/index.html");
+  }, []);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
+    <div style={{ minHeight: "100vh", background: "#0d0f12" }}>
+      <iframe
+        src="/index.html"
+        title="Barbearia Hora do Corte"
+        style={{ border: 0, width: "100%", height: "100vh" }}
       />
     </div>
   );
