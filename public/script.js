@@ -1,21 +1,33 @@
 // Menu mobile
 const burger = document.getElementById('burger');
 const menu = document.getElementById('menu');
+const backdrop = document.getElementById('navBackdrop');
 
-burger.addEventListener('click', () => {
-  const open = menu.classList.toggle('is-open');
+const setMenu = (open) => {
+  menu.classList.toggle('is-open', open);
+  if (backdrop) backdrop.classList.toggle('is-open', open);
   burger.setAttribute('aria-expanded', String(open));
   burger.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
   document.body.style.overflow = open ? 'hidden' : '';
+};
+
+burger.addEventListener('click', () => {
+  setMenu(!menu.classList.contains('is-open'));
 });
+
+// Fecha o menu ao clicar no fundo escuro
+if (backdrop) {
+  backdrop.addEventListener('click', () => setMenu(false));
+}
 
 // Fecha o menu ao clicar em um link
 menu.querySelectorAll('a').forEach((link) => {
-  link.addEventListener('click', () => {
-    menu.classList.remove('is-open');
-    burger.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  });
+  link.addEventListener('click', () => setMenu(false));
+});
+
+// Fecha o menu com a tecla Esc
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && menu.classList.contains('is-open')) setMenu(false);
 });
 
 // Navbar com fundo ao rolar
